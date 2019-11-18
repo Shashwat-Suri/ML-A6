@@ -18,24 +18,27 @@ function leastSquaresBiasL2(X,y,lambda)
 	# Add bias column
 	n = size(X,1)
 	Z = [ones(n,1) X]
-
-	# Find regression weights minimizing squared error
-	v = (Z'*Z + lambda*I)\(Z'*y)
-
+	u = (Z*Z' + lambda*I)\y
 	# Make linear prediction function
-	predict(Xhat) = [ones(size(Xhat,1),1) Xhat]*v
-
+	predict(Xhat) = ([ones(size(Xhat,1),1) Xhat]*Z')*u
 	# Return model
-	return LinearModel(predict,v)
+	return LinearModel(predict,u)
 end
+
+#=
+function leastSquaresBiasL2Kernel(X,y,lambda)
+	K = ((X*X').+1)
+	(m,n) = size(K)
+	u = (K + I*lambda)\y
+	predict(Xhat) = ((Xhat*X').+1)*u
+	return LinearModel(predict,u)
+end
+=#
 
 function leastSquaresBasis(x,y,p)
 	Z = polyBasis(x,p)
-
 	v = (Z'*Z)\(Z'*y)
-
 	predict(xhat) = polyBasis(xhat,p)*v
-
 	return LinearModel(predict,v)
 end
 
