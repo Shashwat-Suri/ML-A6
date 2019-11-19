@@ -109,5 +109,3 @@ end
 function isfinitereal(x)
 	return (imag(x) == 0) & (!isnan(x)) & (!isinf(x))
 end
-
-
